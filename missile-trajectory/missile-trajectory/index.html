@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cubic Strike — Trajectory Targeting Game</title>
+<meta name="description" content="A gap-fill math game: solve cubic equations to plot a path between obstacles and hit the target." />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="masthead">
+      <div>
+        <h1><span>CUBIC</span> STRIKE</h1>
+        <p>Fill in the coefficients of a cubic equation to plot a course through the obstacle field and reach the target. Ten sectors. Read the coordinates on the scope — they're exact.</p>
+      </div>
+      <div class="system-status">
+        <div><span class="dot"></span>TARGETING COMPUTER ONLINE</div>
+        <div>y = ax&sup3; + bx&sup2; + cx + d</div>
+      </div>
+    </header>
+
+    <nav class="level-list" id="level-list" aria-label="Level select"></nav>
+
+    <main class="stage">
+      <section class="scope-wrap">
+        <canvas id="scope" width="600" height="600" aria-label="Trajectory plotting scope"></canvas>
+      </section>
+
+      <section class="panel">
+        <div class="level-header">
+          <div class="level-number" id="level-number">LEVEL 1 / 10</div>
+          <h2 id="level-name">—</h2>
+          <p class="briefing" id="briefing"></p>
+        </div>
+
+        <div class="equation">
+          y&nbsp;=
+          <input type="number" step="any" id="coef-a" placeholder="0" aria-label="Coefficient a" />
+          x<sup>3</sup> +
+          <input type="number" step="any" id="coef-b" placeholder="0" aria-label="Coefficient b" />
+          x<sup>2</sup> +
+          <input type="number" step="any" id="coef-c" placeholder="0" aria-label="Coefficient c" />
+          x +
+          <input type="number" step="any" id="coef-d" placeholder="0" aria-label="Coefficient d" />
+        </div>
+
+        <div class="actions">
+          <button class="primary" id="fire-btn">FIRE</button>
+          <button class="secondary" id="reset-btn">RESET</button>
+          <button class="primary next-btn hidden" id="next-btn">NEXT SECTOR →</button>
+        </div>
+
+        <div class="status" id="status"></div>
+
+        <div class="legend">
+          <span><i class="ib"></i> Iceberg</span>
+          <span><i class="is"></i> Island</span>
+          <span><i class="tg"></i> Target</span>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Built with a canvas &amp; plain JS — no dependencies. Edit <code>js/levels.js</code> to add sectors.
+    </footer>
+  </div>
+
+  <script src="js/levels.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
