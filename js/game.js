@@ -245,49 +245,144 @@
     const sx = toScreenX(ob.x);
     const sy = toScreenY(ob.y);
     const r = ob.r * scale;
+
+    // dashed ring shows the exact hit boundary (this is what matters for collisions)
     ctx.beginPath();
+    ctx.setLineDash([3, 3]);
+    ctx.strokeStyle = ob.type === "iceberg" ? "rgba(180, 235, 250, 0.4)" : "rgba(140, 200, 120, 0.4)";
+    ctx.lineWidth = 1;
     ctx.arc(sx, sy, r, 0, Math.PI * 2);
-    if (ob.type === "iceberg") {
-      ctx.fillStyle = "rgba(180, 235, 250, 0.85)";
-      ctx.strokeStyle = "#eafcff";
-    } else {
-      ctx.fillStyle = "rgba(101, 163, 89, 0.85)";
-      ctx.strokeStyle = "#c8f5b0";
-    }
-    ctx.lineWidth = 2;
-    ctx.fill();
     ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.save();
+    ctx.translate(sx, sy);
+    const s = Math.max(r * 0.95, 10);
+    if (ob.type === "iceberg") drawIcebergIcon(s);
+    else drawIslandIcon(s);
+    ctx.restore();
 
     ctx.fillStyle = "#dff5ff";
     ctx.font = "10px 'IBM Plex Mono', monospace";
     ctx.textAlign = "center";
-    ctx.fillText(`(${ob.x}, ${ob.y})`, sx, sy + r + 13);
+    ctx.fillText(`(${ob.x}, ${ob.y})`, sx, sy + r + 15);
     ctx.textAlign = "left";
+  }
+
+  // Simple flat iceberg glyph: a jagged ice silhouette with two facet lines.
+  function drawIcebergIcon(s) {
+    ctx.beginPath();
+    ctx.moveTo(-s * 0.9, s * 0.55);
+    ctx.lineTo(-s * 0.45, -s * 0.3);
+    ctx.lineTo(-s * 0.05, s * 0.05);
+    ctx.lineTo(s * 0.35, -s * 0.75);
+    ctx.lineTo(s * 0.85, s * 0.5);
+    ctx.closePath();
+    ctx.fillStyle = "#e3f8fc";
+    ctx.fill();
+    ctx.strokeStyle = "#9fe0f2";
+    ctx.lineWidth = 1.4;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(-s * 0.05, s * 0.05);
+    ctx.lineTo(s * 0.1, s * 0.5);
+    ctx.moveTo(s * 0.35, -s * 0.75);
+    ctx.lineTo(s * 0.18, s * 0.3);
+    ctx.strokeStyle = "rgba(120, 185, 205, 0.6)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Simple flat island glyph: sand mound, green hill, single palm tree.
+  function drawIslandIcon(s) {
+    ctx.beginPath();
+    ctx.ellipse(0, s * 0.55, s * 0.95, s * 0.28, 0, 0, Math.PI * 2);
+    ctx.fillStyle = "#dcc98a";
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(-s * 0.55, s * 0.55);
+    ctx.quadraticCurveTo(0, -s * 0.45, s * 0.55, s * 0.55);
+    ctx.closePath();
+    ctx.fillStyle = "#5a9c4c";
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(s * 0.05, s * 0.15);
+    ctx.quadraticCurveTo(s * 0.2, -s * 0.15, s * 0.12, -s * 0.5);
+    ctx.strokeStyle = "#7a5a34";
+    ctx.lineWidth = Math.max(s * 0.1, 1.2);
+    ctx.lineCap = "round";
+    ctx.stroke();
+
+    ctx.strokeStyle = "#3f7a37";
+    ctx.lineWidth = Math.max(s * 0.09, 1.1);
+    ctx.lineCap = "round";
+    [-0.45, 0, 0.4].forEach((fx) => {
+      ctx.beginPath();
+      ctx.moveTo(s * 0.12, -s * 0.5);
+      ctx.quadraticCurveTo(s * (0.12 + fx * 0.6), -s * 0.62, s * (0.12 + fx), -s * 0.28);
+      ctx.stroke();
+    });
   }
 
   function drawTarget(t) {
     const sx = toScreenX(t.x);
     const sy = toScreenY(t.y);
     const r = t.r * scale;
-    ctx.strokeStyle = "#ff5a3c";
-    ctx.lineWidth = 2;
-    [1, 0.6, 0.25].forEach((f) => {
-      ctx.beginPath();
-      ctx.arc(sx, sy, r * f + (f === 1 ? 0 : 0), 0, Math.PI * 2);
-      ctx.stroke();
-    });
+
+    // dashed ring shows the exact hit boundary
     ctx.beginPath();
-    ctx.moveTo(sx - r - 6, sy);
-    ctx.lineTo(sx + r + 6, sy);
-    ctx.moveTo(sx, sy - r - 6);
-    ctx.lineTo(sx, sy + r + 6);
+    ctx.setLineDash([4, 3]);
+    ctx.strokeStyle = "#ff5a3c";
+    ctx.lineWidth = 1.5;
+    ctx.arc(sx, sy, r, 0, Math.PI * 2);
     ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.save();
+    ctx.translate(sx, sy);
+    drawShipIcon(Math.max(r * 0.9, 9));
+    ctx.restore();
 
     ctx.fillStyle = "#ffb3a0";
     ctx.font = "bold 10px 'IBM Plex Mono', monospace";
     ctx.textAlign = "center";
-    ctx.fillText(`MỤC TIÊU (${t.x}, ${t.y})`, sx, sy - r - 10);
+    ctx.fillText(`MỤC TIÊU (${t.x}, ${t.y})`, sx, sy - r - 12);
     ctx.textAlign = "left";
+  }
+
+  // Simple flat ship glyph: hull, mast, sail — the sea target.
+  function drawShipIcon(s) {
+    ctx.beginPath();
+    ctx.moveTo(-s * 0.9, s * 0.15);
+    ctx.lineTo(s * 0.7, s * 0.15);
+    ctx.lineTo(s * 0.95, s * 0.45);
+    ctx.lineTo(-s * 0.95, s * 0.45);
+    ctx.closePath();
+    ctx.fillStyle = "#ffb3a0";
+    ctx.fill();
+    ctx.strokeStyle = "#ff5a3c";
+    ctx.lineWidth = 1.3;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(0, s * 0.15);
+    ctx.lineTo(0, -s * 0.75);
+    ctx.strokeStyle = "#ff5a3c";
+    ctx.lineWidth = 1.3;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(0, -s * 0.68);
+    ctx.lineTo(s * 0.55, -s * 0.08);
+    ctx.lineTo(0, -s * 0.08);
+    ctx.closePath();
+    ctx.fillStyle = "#fff4ee";
+    ctx.fill();
+    ctx.strokeStyle = "#ff5a3c";
+    ctx.lineWidth = 1;
+    ctx.stroke();
   }
 
   function drawExplosion(sx, sy) {
