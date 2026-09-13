@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Oanh Kích Bậc Ba — Game Ngắm Bắn Quỹ Đạo</title>
+<meta name="description" content="Trò chơi toán học điền số: giải phương trình bậc ba để vạch đường bay tránh chướng ngại vật và trúng mục tiêu." />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="masthead">
+      <div>
+        <h1>OANH KÍCH <span>BẬC BA</span></h1>
+        <p>Điền các hệ số của phương trình bậc ba để vạch đường bay xuyên qua bãi chướng ngại vật và trúng mục tiêu. Mười khu vực. Hãy đọc kỹ tọa độ trên màn hình radar — chúng chính xác tuyệt đối.</p>
+      </div>
+      <div class="system-status">
+        <div><span class="dot"></span>HỆ THỐNG NGẮM BẮN: SẴN SÀNG</div>
+        <div>y = ax&sup3; + bx&sup2; + cx + d</div>
+      </div>
+    </header>
+
+    <nav class="level-list" id="level-list" aria-label="Level select"></nav>
+
+    <main class="stage">
+      <section class="scope-wrap">
+        <canvas id="scope" width="600" height="600" aria-label="Trajectory plotting scope"></canvas>
+      </section>
+
+      <section class="panel">
+        <div class="level-header">
+          <div class="level-number" id="level-number">KHU VỰC 1 / 10</div>
+          <h2 id="level-name">—</h2>
+          <p class="briefing" id="briefing"></p>
+        </div>
+
+        <div class="equation">
+          y&nbsp;=
+          <input type="number" step="any" id="coef-a" placeholder="0" aria-label="Coefficient a" />
+          x<sup>3</sup> +
+          <input type="number" step="any" id="coef-b" placeholder="0" aria-label="Coefficient b" />
+          x<sup>2</sup> +
+          <input type="number" step="any" id="coef-c" placeholder="0" aria-label="Coefficient c" />
+          x +
+          <input type="number" step="any" id="coef-d" placeholder="0" aria-label="Coefficient d" />
+        </div>
+
+        <div class="actions">
+          <button class="primary" id="fire-btn">PHÓNG</button>
+          <button class="secondary" id="reset-btn">ĐẶT LẠI</button>
+          <button class="primary next-btn hidden" id="next-btn">KHU VỰC TIẾP THEO →</button>
+        </div>
+
+        <div class="status" id="status"></div>
+
+        <div class="legend">
+          <span><i class="ib"></i> Tảng băng trôi</span>
+          <span><i class="is"></i> Đảo nhỏ</span>
+          <span><i class="tg"></i> Mục tiêu</span>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Xây dựng bằng canvas &amp; JS thuần — không phụ thuộc thư viện ngoài. Chỉnh sửa <code>js/levels.js</code> để thêm khu vực.
+    </footer>
+  </div>
+
+  <script src="js/levels.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
